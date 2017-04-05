@@ -5,7 +5,11 @@
 package it.polito.tdp.anagrammi.controller;
 
 import java.net.URL;
+import java.util.*;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.anagrammi.model.Anagramma;
+import it.polito.tdp.anagrammi.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,6 +17,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class AnagrammiController {
+	
+	Model model;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -35,13 +41,42 @@ public class AnagrammiController {
     @FXML // fx:id="btnReset"
     private Button btnReset; // Value injected by FXMLLoader
 
+    public void setModel(Model model) {
+		this.model=model;   
+    }
+    
     @FXML
     void doCalcolaAnagrammi(ActionEvent event) {
+    	
+    	this.txtAnagrammiCorretti.clear();
+    	this.txtAnagrammiErrati.clear();
+ 
+		String parola=txtParola.getText().trim();
+		if(parola.matches("[a-zA-Z]*")){
+    		model.creaListaLettere(parola);
+    		List<Anagramma> soluzione=model.getCheckAnagrammi(model.risolvi());
+    		for(Anagramma a : soluzione){
+    			if(a.isCorretto()==true)
+    				this.txtAnagrammiCorretti.appendText(a.getParola()+"\n");
+    			else
+    				this.txtAnagrammiErrati.appendText(a.getParola()+"\n");
+    		}
+    		return;
+    	}
+    	else{
+    		this.txtAnagrammiCorretti.setText("Errore: inserire una parola.\n");
+    		return;
+    	}
 
     }
 
     @FXML
     void doReset(ActionEvent event) {
+    	
+    	this.txtParola.clear();
+    	this.txtAnagrammiCorretti.clear();
+    	this.txtAnagrammiErrati.clear();
+    	return;
 
     }
 

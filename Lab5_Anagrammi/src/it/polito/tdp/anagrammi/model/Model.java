@@ -2,10 +2,25 @@ package it.polito.tdp.anagrammi.model;
 
 import java.util.*;
 
+import it.polito.tdp.anagrammi.DAO.AnagrammaDAO;
+
 public class Model {
 	
 	private List<String> anagrammi;
+	private List<Anagramma> anagrammiControllati=new ArrayList<Anagramma>();
 	private Character caratteri[];
+	
+	public List<Anagramma> getCheckAnagrammi(List<String> anagrammi){
+		anagrammiControllati.clear();
+		AnagrammaDAO adao=new AnagrammaDAO();
+		for(int i=0; i<anagrammi.size(); i++){
+			Anagramma a=new Anagramma(anagrammi.get(i));
+			adao.getCheck(a);
+			anagrammiControllati.add(a);
+		}
+		return anagrammiControllati;
+		
+	}
 	
 	public List<String> risolvi(){
 		String parziale="";
